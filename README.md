@@ -39,3 +39,4 @@ $ yarn server
 
 궁금하신 부분은 강의 내 질문 & 답변 게시판 또는 해당 레포지토리의 Issues를 이용해주시기 바랍니다.
 # front_optimization_case2
+# front_optimization_case2
