@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import react, { useEffect } from 'react';
 import styled from 'styled-components';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import ImageModal from './components/ImageModal';
 import InfoTable from './components/InfoTable';
 import SurveyChart from './components/SurveyChart';
+import { getLazyComponentWithPreload } from './utils/useLazyComponent';
+
+const [LazyImageModal, preload] = getLazyComponentWithPreload(
+  () => import('./components/ImageModal'),
+);
 
 function App() {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = react.useState(false);
 
+  useEffect(() => {
+    preload();
+    const img = new Image();
+    img.src =
+      'https://stillmed.olympic.org/media/Photos/2016/08/20/part-1/20-08-2016-Football-Men-01.jpg?interpolation=lanczos-none&resize=*:800';
+  }, []);
   return (
     <div className="App">
       <Header />
@@ -22,13 +32,15 @@ function App() {
       </ButtonModal>
       <SurveyChart />
       <Footer />
-      {showModal ? (
-        <ImageModal
-          closeModal={() => {
-            setShowModal(false);
-          }}
-        />
-      ) : null}
+      <react.Suspense fallback={null}>
+        {showModal ? (
+          <LazyImageModal
+            closeModal={() => {
+              setShowModal(false);
+            }}
+          />
+        ) : null}
+      </react.Suspense>
     </div>
   );
 }
